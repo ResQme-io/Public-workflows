@@ -1,17 +1,17 @@
 on:
   workflow_call:
-    inputs:
-      region:
-        required: true
-        type: string
-      remote-state:
-        required: true
-        type: string
-    secrets:
-      A_K:
-        required: true
-      S_K:
-        required: true
+    #inputs:
+    #  region:
+    #    required: true
+    #    type: string
+    #  remote-state:
+    #    required: true
+    #    type: string
+    #secrets:
+    #  A_K:
+    #    required: true
+    #  S_K:
+    #    required: true
 jobs:
   example_job:
     name: Generate output
