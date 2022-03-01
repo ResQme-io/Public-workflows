@@ -6,11 +6,7 @@ on:
         type: string
       remote-state:
         required: true
-        type: string
-      extra-args:
-        required: false
-        type: string
-        
+        type: string  
     secrets:
       A_K:
         required: true
@@ -69,7 +65,7 @@ jobs:
   
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan" ${{ inputs.extra-args }} 
+        run: terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan" -var-file="environments/${{ matrix.environment }}.tfvars"
   
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
