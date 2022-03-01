@@ -13,12 +13,6 @@ on:
       S_K:
         required: true
 jobs:
-  example_job:
-    name: Generate output
-    runs-on: ubuntu-latest
-    steps:
-      - id: step1
-        run: echo "hello guys"
   terraform-format:
     runs-on: ubuntu-latest
     steps:
