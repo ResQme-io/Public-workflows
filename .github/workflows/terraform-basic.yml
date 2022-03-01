@@ -4,19 +4,23 @@ on:
       region:
         required: true
         type: string
-      var-file:
+      var_file:
         required: false
         type: string 
       state:
         required: false
         type: string 
-      s3-backend:
+      s3_backend:
         required: false
         type: string 
-      has-varfile:
+      has_varfile:
         required: false
         type: boolean
         default: false
+      git_token:
+        required: false
+        type: string
+        
     secrets:
       A_K:
         required: true
@@ -49,7 +53,7 @@ jobs:
     runs-on: ${{ matrix.os }}  
     # environment: ${{ inputs.env }}
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.git_token }}
       AWS_ACCESS_KEY_ID: ${{ secrets.A_K }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.S_K }}
       AWS_REGION: ${{ inputs.region }}
