@@ -4,9 +4,6 @@ on:
       region:
         required: true
         type: string
-      remote-state:
-        required: true
-        type: string 
       var-file:
         required: false
         type: string 
