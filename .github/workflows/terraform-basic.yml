@@ -17,15 +17,14 @@ on:
         required: false
         type: boolean
         default: false
-      git_token:
-        required: false
-        type: string
         
     secrets:
       A_K:
         required: true
       S_K:
         required: true
+      GIT_TOKEN:
+        required: false
 jobs:
   terraform-format:
     runs-on: ubuntu-latest
@@ -53,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.os }}  
     # environment: ${{ inputs.env }}
     env:
-      GITHUB_TOKEN: ${{ secrets.git_token }}
+      GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.A_K }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.S_K }}
       AWS_REGION: ${{ inputs.region }}
