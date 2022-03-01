@@ -63,12 +63,11 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          if [ ${{ inputs.state } == "" ]; then
-            terraform init -backend-config="key=${{ github.event.repository.name }}/${{ inputs.state }}" -reconfigure
-          else
+          if [ ${{ inputs.state } == "" ]; then            
             terraform init -backend-config="key=${{ github.event.repository.name }}/${{ matrix.environment }}.tfstate" -reconfigure
-          fi
-          
+          else
+            terraform init -backend-config="key=${{ github.event.repository.name }}/${{ inputs.state }}" -reconfigure
+          fi          
   
       - name: Terraform Validate
         id: validate
@@ -81,7 +80,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          if [ ${{ s3-backend } == "" ]; then
+          if [ ${{ inputs.var-file }} == "" ]; then
             terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan"
           else
             terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan" --varfile="${{ inputs.var-file }}"
