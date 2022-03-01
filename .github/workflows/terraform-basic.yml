@@ -63,7 +63,7 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          if [ ${{ inputs.state } == "" ]; then            
+          if [ ${{ inputs.state }} == "" ]; then            
             terraform init -backend-config="key=${{ github.event.repository.name }}/${{ matrix.environment }}.tfstate" -reconfigure
           else
             terraform init -backend-config="key=${{ github.event.repository.name }}/${{ inputs.state }}" -reconfigure
