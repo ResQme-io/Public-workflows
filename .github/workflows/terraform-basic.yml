@@ -85,10 +85,10 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          if [ "${{ inputs.has-varfile }}" == false ]; then
+          if [ "${{ inputs.has_varfile }}" == false ]; then
             terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan"
           else
-            if [ "${{ inputs.var-file }}" == "" ]; then
+            if [ "${{ inputs.var_file }}" == "" ]; then
               terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan" -var-file="environments/${{ matrix.environment }}.tfvars"
             else
               terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan" --varfile="${{ inputs.var-file }}"
