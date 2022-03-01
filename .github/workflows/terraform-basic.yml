@@ -6,7 +6,16 @@ on:
         type: string
       remote-state:
         required: true
-        type: string  
+        type: string 
+      var-file:
+        required: false
+        type: string 
+      state:
+        required: false
+        type: string 
+      s3-backend:
+        required: false
+        type: string 
     secrets:
       A_K:
         required: true
@@ -53,7 +62,13 @@ jobs:
   
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="key=${{ github.event.repository.name }}/${{ matrix.environment }}.tfstate" -reconfigure
+        run: |
+          if [ ${{ inputs.s3-backend } == "" ]; then
+            terraform init -backend-config="bucket=${{ inputs.s3-backend }}" -backend-config="key=${{ inputs.state }}" -reconfigure
+          else
+            terraform init -backend-config="key=${{ github.event.repository.name }}/${{ matrix.environment }}.tfstate" -reconfigure
+          fi
+          
   
       - name: Terraform Validate
         id: validate
@@ -65,8 +80,12 @@ jobs:
   
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan"
-  
+        run: |
+          if [ ${{ s3-backend } == "" ]; then
+            terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan"
+          else
+            terraform plan -no-color -input=false -out="${{ matrix.environment }}_plan" --varfile="${{ inputs.var-file }}"
+          fi
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false "${{ matrix.environment }}_plan"
