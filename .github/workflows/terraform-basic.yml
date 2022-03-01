@@ -17,6 +17,7 @@ on:
         required: false
         type: string 
       has-varfile:
+        required: false
         type: boolean
         default: false
     secrets:
