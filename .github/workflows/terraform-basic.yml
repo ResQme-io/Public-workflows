@@ -79,7 +79,7 @@ jobs:
   
       - name: Ensure this is the only pipeline running
         uses: softprops/turnstyle@v1
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.event_name == 'push'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
@@ -96,7 +96,7 @@ jobs:
             fi 
           fi
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.event_name == 'push'
         run: terraform apply -auto-approve -input=false "${{ matrix.environment }}_plan"
         
         
