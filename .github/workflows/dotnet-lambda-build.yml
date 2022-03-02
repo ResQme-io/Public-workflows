@@ -18,6 +18,8 @@ on:
         required: true
 jobs:
   build:
+    outputs:
+      build_path: latest.zip
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.A_K }}
@@ -36,16 +38,16 @@ jobs:
       
     - name: Restore dependencies
       run: |
-        cd {{ inputs.path }}
-        dotnet restore {{ inputs.solution_name }} 
+        cd ${{ inputs.path }}
+        dotnet restore ${{ inputs.solution_name }} 
       
     - name: Build
       run: |
-         cd {{ inputs.path }}
-         dotnet build --no-restore {{ inputs.solution_name }}
+         cd ${{ inputs.path }}
+         dotnet build --no-restore ${{ inputs.solution_name }}
          
     - name: Package
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: |
-        cd {{ inputs.path }}
+        cd ${{ inputs.path }}
         dotnet lambda package latest.zip
