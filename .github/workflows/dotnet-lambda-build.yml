@@ -11,6 +11,10 @@ on:
       region: 
         required: true
         type: string  
+      branch: 
+        required: false
+        type: string  
+        default: main
     secrets:
       A_K:
         required: true
@@ -47,7 +51,7 @@ jobs:
          dotnet build --no-restore ${{ inputs.solution_name }}
          
     - name: Package
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/${{ inputs.branch }}' && github.event_name == 'push'
       run: |
         cd ${{ inputs.path }}
         dotnet lambda package latest.zip
