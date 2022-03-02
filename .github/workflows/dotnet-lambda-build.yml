@@ -57,13 +57,13 @@ jobs:
          dotnet build --no-restore ${{ inputs.solution_name }}
          
     - name: Package
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/${{ inputs.branch }}' && github.event_name == 'push'
       run: |
         cd ${{ inputs.path }}
         dotnet lambda package latest.zip
         
     - name: Upload
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/${{ inputs.branch }}' && github.event_name == 'push'
       run: |
         cd ${{ inputs.path }}
         aws s3 cp latest.zip s3://${{ inputs.bucket }}/lambda/${{ github.event.repository.name }}.zip
