@@ -12,6 +12,10 @@ on:
       region: 
         required: true
         type: string  
+      bucket:
+        required: true
+        type: string
+        default: resqme.io-deployment
       branch: 
         required: false
         type: string  
@@ -56,3 +60,9 @@ jobs:
       run: |
         cd ${{ inputs.path }}
         dotnet lambda package latest.zip
+        
+    - name: Upload
+      run: aws s3 cp latest.zip s3://${{ inputs.bucket }}/lambda/${{ github.event.repository.name }}.zip
+      
+    - name: Get version
+      run: aws s3api list-object-versions --bucket ${{ inputs.bucket }} --prefix lambda/${{ github.event.repository.name }}.zip --query 'Versions[?IsLatest].[VersionId]' --output text
