@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       path:
-        required: true
+        required: false
         type: string
       solution_name:
         required: true
