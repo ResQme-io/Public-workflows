@@ -40,8 +40,9 @@ jobs:
         dotnet restore {{ inputs.solution_name }} 
       
     - name: Build
-      run: dotnet build --no-restore {{ inputs.solution_name }}
+      run: |
          cd {{ inputs.path }}
+         dotnet build --no-restore {{ inputs.solution_name }}
          
     - name: Package
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
