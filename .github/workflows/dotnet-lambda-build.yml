@@ -1,0 +1,50 @@
+name: Build .Net lambda function in /latest.zip path
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      solution_name:
+        required: true
+        type: string    
+      region: 
+        required: true
+        type: string  
+    secrets:
+      A_K:
+        required: true
+      S_K:
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.A_K }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.S_K }}
+      AWS_REGION: ${{ inputs.region }}
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Dotnet CLI for AWS Lambda
+      run: dotnet tool install -g Amazon.Lambda.Tools
+      
+    - name: Restore dependencies
+      run: |
+        cd {{ inputs.path }}
+        dotnet restore {{ inputs.solution_name }} 
+      
+    - name: Build
+      run: dotnet build --no-restore {{ inputs.solution_name }}
+         cd {{ inputs.path }}
+         
+    - name: Package
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        cd {{ inputs.path }}
+        dotnet lambda package latest.zip
