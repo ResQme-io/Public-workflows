@@ -25,7 +25,7 @@ jobs:
   build:
     outputs:
       build_path: latest.zip
-      version: ${{ steps.version.outputs.secondword }}
+      version: ${{ steps.version.outputs.stdout }}
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.A_K }}
