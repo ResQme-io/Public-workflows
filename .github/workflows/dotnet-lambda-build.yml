@@ -29,6 +29,7 @@ jobs:
   build:
     outputs:
       build_path: latest.zip
+      version: ${{ steps.version.outputs.secondword }}
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.A_K }}
@@ -62,7 +63,11 @@ jobs:
         dotnet lambda package latest.zip
         
     - name: Upload
-      run: aws s3 cp latest.zip s3://${{ inputs.bucket }}/lambda/${{ github.event.repository.name }}.zip
+      if: github.ref == 'refs/heads/${{ inputs.branch }}' && github.event_name == 'push'
+      run: |
+        cd ${{ inputs.path }}
+        aws s3 cp latest.zip s3://${{ inputs.bucket }}/lambda/${{ github.event.repository.name }}.zip
       
-    - name: Get version
+    - id: version
+      name: Get version
       run: aws s3api list-object-versions --bucket ${{ inputs.bucket }} --prefix lambda/${{ github.event.repository.name }}.zip --query 'Versions[?IsLatest].[VersionId]' --output text
