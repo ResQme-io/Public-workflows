@@ -80,7 +80,9 @@ jobs:
       - name: Ensure this is the only pipeline running
         uses: softprops/turnstyle@v1
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-  
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
       - name: Terraform Plan
         id: plan
         run: |
